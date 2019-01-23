@@ -192,9 +192,22 @@
 	    \includegraphics[width=90mm]{Skizzen/2. Kapitel/7-Zustandsmodell.png}
     \end{figure}
 \subsubsection{Prozessbeschreibung}
+    \begin{figure}[h]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3. Kapitel/Systemressourcen.png}
+    \end{figure}
     \textbf{2.2.2.1 Kontrollstrukturen des Betriebssystems}\newline
+    Die \textbf{Seitenrahmen (Frames)} beschreiben die Einteilung des Hauptspeichers in Speicherzellblöcken. Auch wird die Instruktionsfolge eines Prozesses in \textbf{Seiten} aufgeteilt.\newline
+    Die \textbf{Speichertabellen} dienen dazu, den Überblick über den Haupt- und virtuellen Speicher zu behalten, wobei gleich ein Teil des Hauptspeichers für das Betriebssystem reserviert ist. Sie sind aufgebaut mit der Zuordnung der Seiten eines Prozesses zu den Frames, aus der Zuteilung des virtuellen Speichers zu den Prozessen und den Schutzattributen von Seiten und Frames.\newline
+    Die \textbf{E/A-Tabellen} dienen zur Verwaltung der E/A-Geräte. Sie sind entweder vverfügbar oder einem Prozess zugeordnet, wobei hier das Betriebssystem den Status des Geräts kennt.\newline
+    Die \textbf{Dateitabellen} enthalten Informationen über die Existenz von Dateien, über ihren Ort im Hintergrundspeicher, Status und Attributen. Falls seperates Dateisystem existiert, so kann ein Großteil dieser Informationen darin enthalten sein.\newline
+    Die \textbf{Prozesstabellen} enthalten Informationen zur Verwaltung aller Prozesse.\newline
     \\
     \textbf{2.2.2.2 Prozesskontrollstrukturen}\newline
+    Das Betriebssystem muss wissen, wo der Prozess gespeichert ist und welche Werte die relevanten Attribute besitzen.\newline
+    Der Prozess kann lokalisiert werden, indem man die \textbf{dynamische Partitionierung (Segmentierung)} einsetzt, welche den Prozess als zusammenhängenden Block in den Speicherzellen ablegt, einen Teil dieser Daten in den Hauptspeicher geladen wird und bei Ausführung alles in den gesamten Prozess in den Hauptspeicher legt. Anders kann es bei einer \textbf{festen Partitionierung (Paging)} ablaufen. Hier wird der Speicher in feste Blöcke partitioniert und ein Prozess-Image in aneinander grenzenden Blöcken gespeichert. Der gesamte Prozess-Image befindet sich hierbei im Hintergrundspeicher und falls ein Teil benötigt wird, wird dieser in freie Frames des Hauptspeichers kopiert.\newline 
+    Um die \textbf{Prozessattribute} zu kontollieren wird dies im Prozesskontrollblock (PCB) mit Prozessidentifikation, Prozesszustandsinformation und Prozesskontrollinformation gespeichert. Die \textbf{Prozessidentifikation} enthält den numerischen Identifikator (PID), den Identifikator des Elternprozesses und die ID des Eigentümers. Die \textbf{Prozesszustandsinformationen} beinhalten den Inhalt der Prozessregister und das Programmstatuswort, welches die Menge der Register mit Statusinformationen beschreibt. Die \textbf{Prozesskontrollinformation} besteht aus Scheduling- und Zustandsinformationen wie Prozesszustand, Priorität, Schedling-Strategie und Ereignisse, den Datenstrukturen (z.B. Referenz auf nächsten Prozess), Signalen oder Nachrichten zwischen Prozessen und zusätzlichen Informationen über Privilegien ddes Prozesses, Speichermanagement,  Eigentümerverhältnissen und ähnlichem.\newline
+    Die Prozessstruktur im Hintergrundspeicher sieht wie folgt aus.\newline
     \\
     \textbf{2.2.2.3 Zusammenfassung der Verwaltung und Beschreibung von Prozessen}\newline
 \subsubsection{Prozesskontrolle}
