@@ -37,7 +37,7 @@
 \subsubsection{Einordnung der Maschinensprache}
     \begin{figure}[h]
         \centering
-	    \includegraphics[width=90mm]{Skizzen/1. Kapitel/Hierarchie-der-Funktionen .png}
+	    \includegraphics[width=90mm]{Skizzen/1_Kapitel/Hierarchie-der-Funktionen.png}
     \end{figure}
 \subsubsection{Aufgaben des Betriebssystems}
     Ein Betriebssystem soll die Komplexität der Maschinensprache mindern. Das Betriebssystem ist eine \textbf{erweiterte Maschine}, die leichter zu programmieren ist als die darunter liegenden Schichten. Außerdem gilt es als \textbf{Ressourcenmanager}, indem es die vorhandenen Systemressourcen (Speicher, CPU, ...) verwaltet und zwischen den Anforderungen der Programme und diesen Ressourcen vermittelt. Für das \textbf{Multiplexing}, das Verteilen von Ressourcen auf mehrere Programme beziehungsweise Nutzer, kann ein \textbf{Time Multiplexing} gewählt werden, das die Ressourcen zeitlich verzahnt vollständig einem Programm zur Verfügung stellt (Prozessor), oder das \textbf{Space Multiplexing}, bei welchem sich mehrere Programme gleichzeitig die Ressourcen teilen (Hauptspeicher). Auch dient das Betriebssystem als \textbf{Kontrollinstanz} für jegliche Zugriffe und unterbindet unerlaubte Zugriffe.\newline
@@ -164,7 +164,7 @@
     Mit \textbf{Running} und \textbf{Not running} wird dieses einfache Prozessmodell beschrieben.
     \begin{figure}[h]
         \centering
-	    \includegraphics[width=90mm]{Skizzen/2. Kapitel/2-Zustandsmodell.png}
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/2-Zustandsmodell.png}
     \end{figure}
     Zwei Anforderungen an Information müssen abgeleitet werden können. Der aktuelle Zustand des Prozess muss beschreibbar sein und die Speicherinformationen des Prozesses müssen abrufbar sein.\newline
     Der \textbf{Scheduler} setzt die Strategie um, nach der entschieden wird, wann welcher Prozess als nächstes rechnen darf. Der \textbf{Dispatcher} übernimmt das Suspendieren und die Zuweisung der CPU an einen Prozess.\newline
@@ -173,7 +173,7 @@
     Hier kommen Ready, Blocked, New und Exit dazu und Not running ist überflüssig.
     \begin{figure}[h]
         \centering
-	    \includegraphics[width=90mm]{Skizzen/2. Kapitel/5-Zustandsmodell.png}
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/5-Zustandsmodell.png}
     \end{figure}
     Die Blocked Queue kann auch noch in priorisierte Queue eingeteilt werden.\newline
     \\
@@ -184,17 +184,17 @@
     Das Swapping kann auch schon im 5-Zustands-Modell eingeführt werden.
     \begin{figure}[h]
         \centering
-	    \includegraphics[width=90mm]{Skizzen/2. Kapitel/5-Zustandsmodell-mit-Suspend.png}
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/5-Zustandsmodell-mit-Suspend.png}
     \end{figure}
     Wenn man bei diesem Modell sowohl bei den im Hauptspeicher enthaltenen als auch bei den ausgelagerten Prozessen zwischen blockierten und nicht blockierten unterscheidet, entsteht das 7-Zustands-Modell.
     \begin{figure}[h]
         \centering
-	    \includegraphics[width=90mm]{Skizzen/2. Kapitel/7-Zustandsmodell.png}
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/7-Zustandsmodell.png}
     \end{figure}
 \subsubsection{Prozessbeschreibung}
     \begin{figure}[h]
         \centering
-	    \includegraphics[width=90mm]{Skizzen/3. Kapitel/Systemressourcen.png}
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/Systemressourcen.png}
     \end{figure}
     \textbf{2.2.2.1 Kontrollstrukturen des Betriebssystems}\newline
     Die \textbf{Seitenrahmen (Frames)} beschreiben die Einteilung des Hauptspeichers in Speicherzellblöcken. Auch wird die Instruktionsfolge eines Prozesses in \textbf{Seiten} aufgeteilt.\newline
@@ -208,20 +208,49 @@
     Der Prozess kann lokalisiert werden, indem man die \textbf{dynamische Partitionierung (Segmentierung)} einsetzt, welche den Prozess als zusammenhängenden Block in den Speicherzellen ablegt, einen Teil dieser Daten in den Hauptspeicher geladen wird und bei Ausführung alles in den gesamten Prozess in den Hauptspeicher legt. Anders kann es bei einer \textbf{festen Partitionierung (Paging)} ablaufen. Hier wird der Speicher in feste Blöcke partitioniert und ein Prozess-Image in aneinander grenzenden Blöcken gespeichert. Der gesamte Prozess-Image befindet sich hierbei im Hintergrundspeicher und falls ein Teil benötigt wird, wird dieser in freie Frames des Hauptspeichers kopiert.\newline 
     Um die \textbf{Prozessattribute} zu kontollieren wird dies im Prozesskontrollblock (PCB) mit Prozessidentifikation, Prozesszustandsinformation und Prozesskontrollinformation gespeichert. Die \textbf{Prozessidentifikation} enthält den numerischen Identifikator (PID), den Identifikator des Elternprozesses und die ID des Eigentümers. Die \textbf{Prozesszustandsinformationen} beinhalten den Inhalt der Prozessregister und das Programmstatuswort, welches die Menge der Register mit Statusinformationen beschreibt. Die \textbf{Prozesskontrollinformation} besteht aus Scheduling- und Zustandsinformationen wie Prozesszustand, Priorität, Schedling-Strategie und Ereignisse, den Datenstrukturen (z.B. Referenz auf nächsten Prozess), Signalen oder Nachrichten zwischen Prozessen und zusätzlichen Informationen über Privilegien ddes Prozesses, Speichermanagement,  Eigentümerverhältnissen und ähnlichem.\newline
     Die Prozessstruktur im Hintergrundspeicher sieht wie folgt aus.\newline
+    \begin{figure}[h]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/Prozessstruktur_im_Hintergrundspeicher.png}
+    \end{figure}
     \\
     \textbf{2.2.2.3 Zusammenfassung der Verwaltung und Beschreibung von Prozessen}\newline
+    Das Betriebssystem entscheidet periodisch, ob ein Prozess angehalten werden soll und ein anderer aktiviert werden soll (Scheduler). Um die Arbeit eines suspendierten Prozesses wieder aufnehmen zu können, muss man einen Prozess beschreiben können.
 \subsubsection{Prozesskontrolle}
+    Es gibt den \textbf{Systemmodus (Kernel Mode)}, bei dem der Prozessor dem Betriebssystem zugeordnet ist, oder den \textbf{Benutzermodus (User Mode)}, bei dem der Prozesor einem Anwendungsprogramm zugeordnert ist. Der Systemmodus ist dabei privilegierter. Das \textbf{Programmstatuswort (PSW)} beschreibt, welcher Modus läuft (0 für Nutzermodus, 1 für Systemmodus).\newline
+    Der \textbf{Betriebssystem-Kern} hat folgende Funktionen:
+    \begin{itemize}
+        \item Support Funktionen: Dienste, die von Nutzerprozessen in Anspruch genommen werden können
+        \item Selbstverwaltungs Funktionen: Fehlermanagment, Konfigurationsmanagement, Abrechnungsmanagement, Leistungsmanagment, Sicherheitsmanagement
+        \item E/A-Management: Verwaltung von Kanälen und Puffern
+        \item Speichermanagement: Segemeniterung, Paging
+        \item Prozessmanagement: Prozesserzeugung und Prozesswechsel
+    \end{itemize}
     \textbf{2.2.3.1 Prozesswechsel (Kontext-Switch)}\newline
+    Die Ursachen, um einen laufenden Prozess zu unterbrechen und einen neuen Prozess einzusetzen, können externe Ereignisse (I/O, timeout, ...), Traps (Ausnahmebedingung, Fehler, ...) oder ein Supervisor-Call (Betriebssystem Funktion) sein.\newline
+    Um den Prozess erfolgreich zu wechseln muss zuerst der PCB den bisherigen Prozess aktualisiert und gesichert werden, dann muss der PCB den bisherigen Prozess in die Queue des Schedulers eingefügt werden. Anschließend wird ein anderer Prozess ausgewählt und ausgeführt. Zum Schluss wird der neue Prozess beim PCB wiederhergestellt und aktualisiert (Ausführungszustand auf "running").\newline
     \\
     \textbf{2.2.3.2 Unterbrechungen}\newline
+    Eine Unterbrechung ist das Maschinenkonzept für die Behandlung nicht deterministischer Abläufe.\newline
+    Man unterscheidet zwischen \textbf{externen Unterbrechungen (Interrupt)} bei Fehlern die außerhalb des Prozesses ausgelöst werden und \textbf{internen Unterbrechungen (Exception)}, welche vom ausgeführten Prozess selbst ausgelöst wird. Die \textbf{Unterbrechungsroutine (Interrupt Handler)} ist eine Komponente des Betriebssystems, die entscheidet, ob bei einer Unterbrechung der Prozess fortgesetzt werden kann oder in einen anderen Prozess gewechselt werden muss.\newline
     \\
     \textbf{2.2.3.3 Moduswechsel}\newline
+    Die Schritte beim Moduswechsel beginnen mit der Aktualisierung und Sicherung der Zustandsinformationen des Prozesskontrollblocks, dann wird der eigentliche Moduswechsel durch Freigabe aller Privilegien durchgeführt und abschließend in die Unterbrechungsroutine gesprungen. Ein Moduswechsel ist schneller als ein Prozesswechsel, da die Zustandsinformationen nicht gesichert werden müssen.\newline
+    \begin{figure}[h]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/Prozess_Moduswechsel.png}
+    \end{figure}
     \\
     \textbf{2.2.3.4 Konflikte bei Unterbrechungen}\newline
+    Ursachen für Konflikte können sein, wenn während der Unterbrechungsbehandlung weitere Unterbrechungen auftreten, oder, wenn gleichzeitig mehrere Unterbrechungswünsche eintreffen.\newline
+    Diese können gelöst werden, indem Prioritäten von Unterbrechungen eingeführt werden. Hierbei haben Benutzerprozesse die niedrigste Priorität, bei internen Unterbrechungen wird die Priorität des Prozesses übertragen, bie externen Unterbrechungen werden von 0 bis 31 Prioritäten festgelegt und falls die Priorität einer Unterbrechung höher ist als die Unterbrechungsbehandlung, die gerade läuft, wird diese zurückgestellt.\newline
     \\
     \textbf{2.2.3.5 Ausführung des Betriebssystems}\newline
+    Ein Betriebssystem funktioniert wie eine gewöhnliche Computersoftware, das von einem Prozessor ausgeführt wird und muss oft die Kontrolle abgeben und bekommt dann vom Prozessor die Kontrolle wieder zurück. \newline
+    Ein Konzept ist das des \textbf{seperaten Kern (Non-Process Kernel)}, welches in älternen Betriebssysteme vorkommt und der Kern des Betriebssystems außerhalb jeden PProzesses aufgeführt wird. Wir ein in Ausführung befindlicher Prozess unterbrochen, muss der Kontext gespeichert werden und die Kontrolle an den Betriebssystem-Kern übergeben. Das Betriebssystem verfügt über einen eigenen Speicher und eigenen Systemkeller zur Kontrolle von Prozeduraufrufe und entsprechenden Rücksprüngen. Ein anderes Konzpet ist das der \textbf{Integration in die Nutzerprozesse (Execution within User Process)}, welcher bei kleineren  Computern gebräuchlich ist und das gesamte Betriebssystem im Kontext jedes Nutzerprozesses ausgeführt wird. Ein Weiteres ist das es \textbf{prozessbasierten Betreibssystem (Process-based Operation System)}, bei welchem das Betriebssystem als eine Sammlung von Systemprozessen implementiert wird.   
 \subsection{Threads}
+    EinAls Zusammenfassung des Prozesses kann der Prozess als Eigentümer und Verwalter von Ressourcen oder als eine Einheit, die eine gewisse Aufgabe erledigt betrachtet werden. Die zweite Definition wird im folgeden als Thread bezeichnet. 
 \subsubsection{Multithreading}
+    
 \subsubsection{Threadzustände}
 \subsubsection{User-Level-Threads (ULT)}
 \subsubsection{Kernel-Level-Threads (KLT)}
