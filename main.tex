@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{float}
 \usepackage{amsfonts}
 \usepackage{tabularx}
 \usepackage{mathtools}
@@ -194,7 +195,7 @@
 \subsubsection{Prozessbeschreibung}
     \begin{figure}[h]
         \centering
-	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/Systemressourcen.png}
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/Systemressourcen.png}
     \end{figure}
     \textbf{2.2.2.1 Kontrollstrukturen des Betriebssystems}\newline
     Die \textbf{Seitenrahmen (Frames)} beschreiben die Einteilung des Hauptspeichers in Speicherzellblöcken. Auch wird die Instruktionsfolge eines Prozesses in \textbf{Seiten} aufgeteilt.\newline
@@ -210,7 +211,7 @@
     Die Prozessstruktur im Hintergrundspeicher sieht wie folgt aus.\newline
     \begin{figure}[h]
         \centering
-	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/Prozessstruktur_im_Hintergrundspeicher.png}
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/Prozessstruktur_im_Hintergrundspeicher.png}
     \end{figure}
     \\
     \textbf{2.2.2.3 Zusammenfassung der Verwaltung und Beschreibung von Prozessen}\newline
@@ -237,7 +238,7 @@
     Die Schritte beim Moduswechsel beginnen mit der Aktualisierung und Sicherung der Zustandsinformationen des Prozesskontrollblocks, dann wird der eigentliche Moduswechsel durch Freigabe aller Privilegien durchgeführt und abschließend in die Unterbrechungsroutine gesprungen. Ein Moduswechsel ist schneller als ein Prozesswechsel, da die Zustandsinformationen nicht gesichert werden müssen.\newline
     \begin{figure}[h]
         \centering
-	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/Prozess_Moduswechsel.png}
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/Prozess_Moduswechsel.png}
     \end{figure}
     \\
     \textbf{2.2.3.4 Konflikte bei Unterbrechungen}\newline
@@ -248,19 +249,124 @@
     Ein Betriebssystem funktioniert wie eine gewöhnliche Computersoftware, das von einem Prozessor ausgeführt wird und muss oft die Kontrolle abgeben und bekommt dann vom Prozessor die Kontrolle wieder zurück. \newline
     Ein Konzept ist das des \textbf{seperaten Kern (Non-Process Kernel)}, welches in älternen Betriebssysteme vorkommt und der Kern des Betriebssystems außerhalb jeden PProzesses aufgeführt wird. Wir ein in Ausführung befindlicher Prozess unterbrochen, muss der Kontext gespeichert werden und die Kontrolle an den Betriebssystem-Kern übergeben. Das Betriebssystem verfügt über einen eigenen Speicher und eigenen Systemkeller zur Kontrolle von Prozeduraufrufe und entsprechenden Rücksprüngen. Ein anderes Konzpet ist das der \textbf{Integration in die Nutzerprozesse (Execution within User Process)}, welcher bei kleineren  Computern gebräuchlich ist und das gesamte Betriebssystem im Kontext jedes Nutzerprozesses ausgeführt wird. Ein Weiteres ist das es \textbf{prozessbasierten Betreibssystem (Process-based Operation System)}, bei welchem das Betriebssystem als eine Sammlung von Systemprozessen implementiert wird.   
 \subsection{Threads}
-    EinAls Zusammenfassung des Prozesses kann der Prozess als Eigentümer und Verwalter von Ressourcen oder als eine Einheit, die eine gewisse Aufgabe erledigt betrachtet werden. Die zweite Definition wird im folgeden als Thread bezeichnet. 
+    EinAls Zusammenfassung des Prozesses kann der Prozess als Eigentümer und Verwalter von Ressourcen oder als eine Einheit, die eine gewisse Aufgabe erledigt betrachtet werden. Die zweite Definition wird im folgeden als Thread bezeichnet.
 \subsubsection{Multithreading}
-    
+    \begin{figure}[h]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/multithread.png}
+    \end{figure}
+    Mit einem Prozess wird in der Multithread-Umgebung ein virtueller Adressraum, in dem das Prozessimage abgelegt wird, ein exclusiver Zuganz zum Prozessor, zu Prozessen, zu Dateien, zu E/A-Geräten und Zugriffsrechte assoziiert.\newline
+    Innerhalb dieses Prozesses werden mehrere Threads ausgeführt, die dessen Adressraum nutzen. Ein Thread wird durch einen Zustand der Threadausführung, den Thread Kontext, den zwei Stacks für die Ausführung (user/kernel stack), etwas Speicherplatz und dem Zugriff auf Speicher und Ressourcen des Prozesses definiert.\newline
+    Im \textbf{Singlethreading} werden die Prozessorregister vom Prozess kontrolliert. Zusätzlich wird beim \textbf{Multithreading} ein Kontrollblock (TCB) für jeden Thread zugeordnet.\newline
+    Vorteile:
+    \begin{itemize}
+        \item weniger Zeit zur Generierung neuer Threads
+        \item größere Kommunikation zwischen Threads (Sicherheitsproblem)
+        \item weniger Wartezeit bei Blockierungen von einzelnen Threads
+        \item weniger Zeit beim Kontextwechsel unter Threads
+    \end{itemize}
+    Wird ein Prozess geswappt, werden auch alle Threads mit ausgelagert. 
 \subsubsection{Threadzustände}
+    \begin{figure}[h]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/threadzustaende.png}
+    \end{figure}
 \subsubsection{User-Level-Threads (ULT)}
+    Bei diesen Threads ist das Threadmanagement Aufgabe der Anwendung und das Betriebssystem kennt diese Threads nicht. Threadbibliotheken ermöglichen die Programmierung von Multithread-Anwendungen. Diese erhalten Code für die Generierung und Terminierung, zur Nachrichten- und Datenübermittlung, zum Scheduling und zum Sichern und Löschen von Threadkontexten.\newline
+    Läuft ein Thread in einem Prozess kann in diesem jederzeit ein neuer Prozess generiert werden.\newline
+    Vorteile:
+    \begin{itemize}
+        \item Keine Privilegien für die Threaderzeugung/Threadwechsel
+        \item Scheduling kann auf Threadebene realisiert werden
+        \item Jedes Betriebssystem kann dieses machen
+    \end{itemize}
+    Nachteile:
+    \begin{itemize}
+        \item wird ein Thread blockiert, wird der gesamte Prozess blockiert (Lösung: Jacketings)
+        \item keine parallele Ausführung von Threads (Lösung: seperate Prozesse)
+    \end{itemize}
 \subsubsection{Kernel-Level-Threads (KLT)}
+    Dieses Thread Konzept wird vom Betriebssystem-Kern ausgeführt. Vorteile sind die schnelle Erzeugung, Terminiertung und Wechsel von KLTs, verschiedene Prozessoren können für unterschiedliche Threads desselben Prozesses benutzt werden und bei Blockade kann die Kontrolle einem anderen Thread desselben Prozesses übergeben werden. Ein Nachteil ist bei der Kontrollübergabe an einen anderen Thread, dass ein Moduswechsel erforderlich ist und es deshalb zu verlangsamung kommen kann.
 \subsubsection{Kombinierte Konzepte}
+     Um beide Threadkonzepte zu verwenden, wurden kombinierte Betriebssysteme entwickelt. Ziel ist es dabei, die Vorteile beider Konzepte zu kombinieren und die Nachteile zu minimieren. Im folgenden werden die Verhältnis Threads:Prozesse näher dargestellt.
+     \begin{itemize}
+         \item 1:1 jedem Thread ist ein Prozess zugeordnet (ältere UNIX-Versionen)
+         \item n:1 einem Prozess sind mehrere Threads zugeordnet (Windows NT, Solaris)
+         \item 1:n ein Thread kann von einer Prozessumgebung zu anderen migriert werden (Clouds Operating System)
+         \item n:m kombiniert n:1 und 1:n Ansätze (Operating System TRIX)
+     \end{itemize} 
 \subsubsection{Andere Formen paralleler Abläufe}
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/paralleke_prozessoren.png}
+    \end{figure}
+    Um Parallelität zu ermöglichen, gibt es die Ansätze Master/Slave Architektur, das Symmetrische Multiprocesseing (SMP) und das Clustering.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/parallel_prozessoren_bild.png}
+    \end{figure}
+    Der SMP-Ansatz hat die Vorteile Verteilter Systeme, aber es muss gewährleistet werden, dass zwei Prozessoren nie denselbsen Prozess auswählen. Beim SMP hat jeder Prozessor seine eigene Kontrolleinheit, ALU und Register. Jeder Prozess hat Zugriff zum gemeinsamen Hauptspeicher und den E/A-Geräten.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/smp.png}
+    \end{figure}
 \subsection{Scheduling}
 \subsubsection{Das Prinzip des Schedulings}
+    Scheduling wird notwendig, sobald mindestens ein Prozess im Zustand \textit{running} und mehrere Prozesse im Zustand \textit{ready} sind.
+    \textbf{2.4.1.1 Varianten des Schedulings}\newline
+    Beim \textbf{nicht preemptiven Scheduling} handelt es sich um eine Art, die beim Stapelbetrieb eingesetzt wird. Deshalb wurde es meist in älternen Systemen benutzt. Das \textbf{preemptive Scheduling} unterbricht jederzeit Prozesse, so dass ein anderer Prozess zur Ausführung kommen kann.\newline
+    \\
+    \textbf{2.4.1.2 Anforderung an einen Scheduling-Algorithmus}\newline
+    Es werden drei Klassen von Systeme unterschieden. Das Batch-System (Stapelverarbeitungssystem), das interaktive System und das Echtzeitsyste.\newline
+    Anforderungen, die allen Systemen gemein sind, sind:
+    \begin{itemize}
+        \item Fairness: gerechter Anteil an der Prozessorzeit
+        \item Policy Enforcement: keine Ausnahmen
+        \item Balance: alle Teile des Systems sind ausgelastet
+        \item Datensicherheit: kein Verlust von Daten
+        \item Skalierbarkeit: mittlere Leistung wird beibehalten
+        \item Effizienz: Prozessor vollständig ausgelastet
+    \end{itemize}
+    Beim Batch-System gilt zusätzlich noch der Durchsatz (Maximierung der Prozesse pro Zeiteinheit), die Verweildauer (Minimierung der Zeit vom Start bis Beendigung) und die Prozessorauslastung (maximale Auslastung der CPU). Das Interaktive System benötigt zusätzlich noch minimale Antwortzeit, Verhältnismäßigkeit (Erwartungen des Benutzers müssen berücksichtigt werden) und maximale Anzahl interagierenden Nutzer (Interaktion). Beim Echtzeitsystem sind Sollzeitpunkte (Timeouts) und Vorhersagbarkeit weitere Anforderungen.\newline
+    Meist werden die Ready-Queues in Prioritätenlisten aufgesplittet. Damit Prozesse mit niedrigen Priotitäten nicht verhungern, kann sich die Priotitäten durch die Zeit in der Queue ändern.\newline
+    Beim \textbf{nonpreemptiven Modus} wird der Prozess bis zur Terminierung oder durch Warten fortgesetzt. Anders beim \textbf{preemptiven Modus}, bei welchen Prozesse aufgrund eines neuen Prozesses, ein höher priorisierten Prozess oder Timeouts terminiert werden.\newline
+    \\
+    \textbf{2.4.1.3 Scheduling vs. Dispatching}\newline
+    Ein Scheduler nimmt die Auswahl eines rechenbereiten Prozesses und die Unterbrechung des aktuell abgearbeiteten Prozesses. Der Dispatcher setzt diesen Kontextwechsel um.
 \subsubsection{Scheduling-Algorithmen}
+    \textbf{2.4.2.1 Begriffe}\newline
+    \begin{itemize}
+        \item Ankunftszeit: Zeitpunkt ab Existenz eines Prozesses
+        \item Startzeit: Zeitpunkt der ersten Zuweisung an den Prozessor
+        \item Verweildauer: Zeitdifferenz zwischen Ankunftszeit und Terminierung
+        \item Antwortzeit: Zeitspanne zwischen Eingabe und Beginn des Empfange seiner Antwort
+        \item Bedienzeit: Zeit im Zustand \textit{running} 
+        \item Wartezeit: Zeit im Zustand \textit{not running}
+        \item Beendigungszeit: Zeitpunkt der Terminierung
+        \item Normalisierte Verweildauer: Quotient Verweiildauer zu Bedienzeit (sollte bei 1 liegen)
+    \end{itemize}\newline
+    \\
+    \textbf{2.4.2.2 Nicht-preemptive Scheduling-Algorithmus}\newline
+    Es gibt das Prinzip \textbf{First Come First Serve (FCFS)}, welches aber schnell blockiert werden kann. Vorteile sind die einfache Implementierung und die Fairness.\newline
+    Ein anderes Prinzip ist das \textbf{Shortest Process Next (SPN)/Shortest Job First (SJF)}, was zum Problem des Verhungerns längerer Prozesse führen kann und man muss den Mittelwert ähnlicher abgearbeiteten Aufträge berechnen, um die erwartete Abarbeitungsdauer zu kennen. Ein Vorteil ist die günstige Verweildauer.\newline
+    \\
+    \textbf{2.4.2.3 Preemptive Scheduling-Algorithmus}\newline
+    Um wichtigere Jobs einzuschieben und die Verweildauer und Antwortzeit zu reduzieren ist diese Art der Algorithmen optimal. Diese ermöglichen auch mehr Flexibilität können aber auch zu Inkonsistenzen führen, wenn Jobs für andere Jobs benötigt werden.\newline
+    Das Pendant zum SJF ist beim preemptiven Scheduling das Prinzip \textbf{Shortest Remaining Processing Time (SRPT)}. Ein anderes Prinzip ist \textbf{Round Robin}, wobei mit Timeouts gearbeitet wird. Die mittlere Verweildauer ist besser als FCFS, aber schlechter als SJF und SRPT. Dennoch ist RR fair (kein Verhungern) und praktisch implemetierbar, dazu muss aber der Timeout optimal gewählt werden. Bei RR wird ein kürzerer Prozess schneller abgearbeitet.\newline
+    \\
+    \textbf{2.4.2.4 Priority Scheduling (PS)}\newline
+    Beim Priority Scheduling wird der höherpriorisierte Prozess zuerst ausgewählt mit den Vorteilen, dass wichtige Prozesse bevorzugt werden und der praktischen Implementierung. Nachteile sind das Verhungern von niedrig priorisierten Prozessen und die relativ schlechte mittlere Verweildauer.\newline
+    \\
+    \textbf{2.4.2.5 Multilevel Feedback Queueing}\newline
+    Bei diesem Algorithmus wird sowohl mit Prioritätsklassen als auch mit Zeitscheiben gearbeitet. Bei der Inanspruchnahme der gesamten zugewiesenen Zeit wird der Prozess unterbrochen und an das Ende der nächst niedrigeren Queue gesetzt. Wenn der Prozess den Prozessort freiwillig verlässt, landet dieser wieder in der selben Queue. Die Queue werden im RR-Verfahren abgearbeitet.  
 \subsubsection{Prozesswechsel}
+    Der Dispatcher realisiert diesen Kontextwechsel des Prozessors.
 \subsubsection{Arten des Schedulings}
+    Es werden \textbf{Short/Medium/Long Term Scheduling} unterschieden.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/2_Kapitel/arten_von_scheduling.png}
+    \end{figure}
 
 \newpage
 \section{Multiprocessing}
