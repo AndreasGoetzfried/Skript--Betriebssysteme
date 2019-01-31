@@ -372,28 +372,154 @@
 \section{Multiprocessing}
 \subsection{Deadlocks bei Prozessen}
 \subsubsection{Motivation der Deadlocks anhand zweier Beispiele}
+    Wenn vier Autos in eine Kreuzung einfahren und jeweils die anderen Autos am Weiterfahren hindern, sind wir in einer Deadlocksituation.\newline
+    Ein System befindet sich im Zustand einer \textbf{Verklemmung (Deadlock)}, wenn sich mindestens zwei Prozesse in einem wechselseitigen Wartezustand befinden und durch die Freigabe aller Betriebsmittel möglicher anderer Prozesse dieser Zustand nicht aufgehoben werden kann. 
 \subsubsection{Das Prinzip der Deadlocks}
+    Ein \textbf{Deadlock} ist die dauerhafte Blockierung einer Menge von Prozessen, die gemeinsame Systemressourcen nutzen oder miteinander kommunizieren.\newline
+    Wir unterscheiden zwischen \textbf{wiederverwendbaren Ressourcen}, welche von genau einem Prozess genutzt werden können und durch diese Nutzung nicht zerstört werden, und den \textbf{verbrauchenden Ressourcen}, welche erzeugt und zerstört werden und deshalb kein Deadlock möglich ist.
 \subsubsection{Deadlock Prevention}
+    Um Deadlocks zu verhindern können indirekte und direkte Methoden eingesetzt werden.\newline
+    Bei der \textbf{indirekten Methode} müssen drei Bedingungen erfüllt werden, damit ein Deadlock eintreten kann. Diese sind Mutual Exclusion (zwei Ressourcen, die nur von einem Prozess gleichzeitig genutzt werden kann; zwei Prozesse und 2 Betriebsmittel), Hold and Wait (ein Prozess behält eine Ressource, während er auf eine weitere Ressource wartet) und No Preemption (eine Ressource kann einem Prozess nicht entzogen werden).\newline
+    Bei der \textbf{direkten Methode} wird die genaue Situation betrachtet, die zu einem Deadlock führen kann, dies wird als Circular Wait (es existiert eine geschlossene Kette von Prozessen, so dass jeder Prozess mindestens eine Ressource hält, die von einem anderen Prozess der Kette benötigt wird).\newline
+    \textbf{3.1.3.1 Deadlock Avoidance}\newline
+    Bei Deadlockvermeidung lässt man die drei Bedingungen außer Acht. Insbesondere werden Unterbrechungen und Nebenläufigkeiten zugelassen. Es wird dynamisch entschieden, ob Ressourcen genutzt werden können. Verfahren sind, dass ein Prozess nicht gestartet werden darf, falls seine Anforderungen zu einem Deadlock führen könnten, oder, dass eine Ressourcenanfrage nicht befürwortet werden darf, falls sie zu einem Deadlock führen könnte.\newline
+    Die erste Methode wird \textbf{Prozess Initiation Denial} genannt. Hierzu werden einige Beschreibungen eingeführt. $\text{Ressource}$ beschreibt einen Vektor aller möglicher Ressourcen, die $\text{Verfügbarkeit}$ einen Vektor der Verfügbaren Ressourcen. Ein Prozess belegt mehrere Ressourcen, welcher zu dem Vektor $\text{Claim}_{\text{Prozess}_{P_1}}$, wenn wir mehrere Prozesse nehmen, wird eine Matrix erzeugt. Die Matrix $\text{Allocation}$ beschriebt die Belegung von Ressourcen zu einem bestimmten Zeitpunkt.\newline
+    Damit gilt $R_i= V_i + \sum_{k=1}^n A_{ki}$, $C_{ki}\leq R_i$ und $A_{ki}\leq C_{ki}$.
+    Somit wird ein neuer Prozess nur gestartet, falls $R_i\geq C{(n+1)_i}+\sum_{k=1}^n C_{ki}$, in diesem Fall ist es möglich alle gerade laufenden Prozesse quasi gleichzeitig maximale Anforderungen an die Ressource stellen würden.\newline
+    Die zweite Methode {Ressource Allocation Denial} beschreibt einen Algorithmus eines Systems mit fester Anzahl von Prozessen und Ressourcen. Zu jedem Zeitpunkt sind einem Prozess null oder mehr Ressourcen zugeordnet. Der Zustand des Systems ist die aktuelle Zuordnung von Ressoucren zu einem Prozess und wird durch Vektoren und Matrizen beschrieben. Ein \textbf{sicherer Zustand} herrscht, wenn mindestens eine Folge von Prozessabläufen, die nicht zu einem Deadlock führt, bis zum Ende abgearbeitet werden können.\newline  
+    \\
+    \textbf{3.1.3.2 Petri-Netze zur Prozessmodellierung}\newline
+    Ein \textbf{Netz} ist ein endlicher Graph $X=(S\cup T, F)$ mit $S, T$ disjunkt, $S$ endlicher Menge von Stellen, $T$ endliche Menge von Transitionen und $F\subset (S\times T)\cup (T\times S)$ Menge von Kanten.
+    \begin{figure}[h]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/Beispiel_Petrinetz.png}
+    \end{figure}\newline
+    Ein \textbf{Stelle/Transitions-System} ist ein 6-Tupel $Y=(S,T,F,W,M_0)$ bestehend aus dem Netzt $(S,T,F)$ und den Abbildungen die Kapazität $K:S\rightarrow \mahtbb{N} \cup {\infty}$, das Kantengewicht $W:F\rightarrow \mathbb{N}$ und die Anzahl der Marken $M:S\rightarrow \mathbb{N}$, zusätzlich gilt $\forall_{s\in S} M(s)\leq K(s)$.\newline
+    Die \textbf{Stellen} eines Petrinetztes repräsentieren Signale, Daten, ..., wohingegen die \textbf{Transitionen} Ereignisse, Vorgänge, ... beschreiben.\newline
+    Definitionen:
+    \begin{itemize}
+        \item Vorbereich: $x:= {y\in S\cup T:(y,x)\in F}$
+        \item Nachbereich: $x:= {y\in S\cup T:(x,y)\in F}$
+        \item Menge aller Eingangskanten: $-x:= {(y,x)\in (S\times T)\cup (T\times S):(y,x)\in F}$
+        \item Menge aller Ausgangskanten: $x-:= {(x,y)\in (S\times T)\cup (T\times S):(x,y)\in F}$
+    \end{itemize}\newline
+    \\
+    \textbf{3.1.3.3 Markierungen}\newline
+    Markierung können einer Menge aktiverter Transitionen zugeordnet werden, $T_{akt}(M)={t\in T:(\forall_{s\in t}:M(s)\geq W(s,t))\wedge (\forall_{s\in t}M(s)+W(t,s)\leq K(s))}$.\newline
+    \\
+    \textbf{3.1.3.4 Modellierung von nebenläufigen Prozessen}\newline
+    \textbf{FEHLT WAS}
+    \\
+    \textbf{3.1.3.5 Deadlock Detection (Deadlockerkennung)}\newline
 \subsection{Prozesskoordination}
 \subsubsection{Nebenläufigkeit von Prozessen}
+    \textbf{Unabhängige Abläufe} sind gegebenenfalls parallel auszuführende Benutzeraufträge, die sich gegenseitig nicht beeinflussen. Wohingegen \textbf{abhängige Abläufe} miteinander kooperieren.\newline
+    \textbf{Quasi-Parallelität} bezeichnet stückweise Abarbeitung von Prozesses auf einem Prozessor, wohingegen \textbf{Paralellität} mehrere Prozesse auf mehreren Prozessoren gleichzeitig bearbeitet.\newline
+    Mehrere Abläufe heißen \textbf{nebenläufig}, wenn sie inhaltlich zusammenwirken, also parallel und abhängig sind.\newline
+    Beim \textbf{synchronem Ablaufverhalten} sind alle Abläufe streng getaktet, so dass jeder Prozess zu einem Zeitpunkt an eine Stelle seiner Ausführung ankommt. Wohingegen \textbf{asynchrones Ablaufverhalten} ungeregelte Abläufe beschreibt.
 \subsubsection{Kritische Bereiche}
+    \textbf{3.2.2.1 Erzeuger/Verbraucher-Problem}\newline
+    Ein Synchronisationsproblem kann auftregen, wenn der Verbraucher nicht auf Daten zugreifen darf, die noch nicht produziert wurden, der Erzeuger keine Daten ablegen darf, falls der Speicherplatz voll ist, oder der Speicher nicht gleichzeitig von Erzeuger und Verbraucher verändert werden darf.\newline
+    Ein \textbf{einfacher Lösungsansatz} für den dritten Punkt, den gleichzeitigen Speicherzugriff, isst das Vermeiden von Parallelität und von Abhängigkeit.\newline
+    Beim \textbf{Lösungsansatz mit Ringpuffer}, welcher durch ein eindimensionales Array mit Modulo-Funktion realisiert wird, muss immer ein Speicherplatz frei bleiben.
 \subsubsection{Wechselseitiger Ausschluss}
+    Solange sich ein Prozess in einem kritischen Bereich befindet, kann kein anderer Prozess in diesen kritischen Bereich eintreten. Ein \textbf{kritischer Bereich} ist eine Phase, in der der Prozess gemeinsam genutzte Daten oder Betriebsmittel einsetzt.\newline
+    Lösungen um keinen zweiten Prozess in einen kritischen Zustand zu lassen sind, \textbf{Mutal exclusion}, wobei höchstens ein Prozess im kritischen Bereich zugelassen wird, \textbf{Progress}, wenn sich kein Prozess im kritischen Bereich befindet wird ein Kandidat in diesen Bereich zugelassen, oder \textbf{Bounded Waiting}, wobei zwischen Anforderung eines Prozesses und dem Eintreten in den kritischen Bereich eine Zeitdauer liegen kann, damit es möglich ist Prioritätsregelungen auszuschließen und ein Prozess den kritischen Bereich wieder verlässt.\newline
+    \textbf{3.2.3.1 Softwarelösungen für den wechselseitigen Ausschluss}\newline
+    Hier gibt es zwei verschiedene Algorithmen, der Algorithmus von Decker mit seinen drei Ansätzen und der Algorithmus von Peterson.\newline
+    Beim \textbf{ersten Ansatz des Algorithmus von Decker} wird eine geschützte, globale Variable verwendet, die anzeigt, welcher Prozess in den kritischen Bereich eintreten darf. Möchte ein Prozess in den kritischen Bereich, muss er nachschauen, ob die Variable seinen Prozess beschreibt, wenn dies der Fall ist, kann er eintreten. Kehrt dieser wieder aus dem kritischen Bereich zurück, muss er selbst einem anderen wartenden Prozess die Variable zuweisen. Probleme sind, dass die Prozesse den Bereich nur abwechselnd betreten können, bei Termination eines Prozesses im unkritischen Bereich wird der kritische Bereich blockiert und die Variable selbst kritisch ist. Die Bedingung Progress ist nicht erfüllt.\newline
+    Im \textbf{zweiten Ansatz des Algorithmus von Decker} wird nicht mehr die Nummer des Folgeprozesses gespeichert, sondern jedem Prozess wird eine eigene boolean-Variable (flag) zugewiesen, die den Anspruch auf den kritischen Bereich beschreibt. Hier kann ein Prozess mehrfach hintereinander den kritischen Bereich betreten und blockiert keinen Prozess. Fällt ein Prozess zwischen Setzen auf ''true'' und Betreten des kririschen Bereichs aus, so funktioniert der Algorithmus nicht mehr. Dadurch ist die Bedingung Mutual Exclusion nicht erfüllt.\newline
+    Der \textbf{dritte Ansatz des Algorithmus von Decker} wird eine flag-Variable erst auf true gesetzt und dann die andere getestet wird. Das Problem hierbei ist, dass zwei Prozesse auf true gesetzt werden können und dadurch keiner den kritischen Bereich betreten darf.\newline
+    Die \textbf{korrekte Lösung des Decker-Algorithmus} betrachtet beide Prozesszustände und bringt eine Ausführungsreihenfolge ein.\newline
+    Die andere Art des Algoirhtmuses ist der \textbf{Algorithmus von Peterson}. Dieser geht nach Schritten vor. Zuerst wird angezeigt, dass der kritische Bereich betreten werden will, dann wird anderen den Vortritt eingeräumt und abschließend wird der kritische Bereich betreten. Beim Vortritt gilt das letzte Wort und alle drei Bedingungen sind erfüllt.\newline 
+    \\
+    \textbf{3.2.3.2 Hardwarelösungen für den wechselseitigen Ausschluss}\newline
+    Eine \textbf{Unterbrechungsvermeidung (Interrupt Disabling)} kann erreicht werden, wenn man Unterbrechungen unmöglich macht und preemptives Scheduling unterbunden wird. Prozesse im kritischen Bereich dürfen nich tunterbrochen werden. Dies ist gefährlich und nicht realisierbar, da keine Problembehandlungsroutine eingeschoben werden darf, außerdem funktioniert es in einer Multiprozessorumgebung nicht.\newline
+    Beim \textbf{Test and Set} werden Unterbrechungsvermeidungen nicht auf den Prozessor, sondern auf Betriebsmittel bezogen. Die Bedingung Bounded Waiting ist nicht erfüllt, da ein Prozess beleibig oft durch das Scheduling zurückgestellt werden kann. Dies kann mit Hilfe des Austauschbefehls gelöst werden.\newline
 \subsubsection{Semaphore}
+    Die bisherigen vorgestellten atomaren Operationen der Lösung für den wechselseitigen Ausschluss sind für komplexe Aufgabenstellungen zu unübersichtlich. Deshalb werden höhersprachliche Konstrukte entwickelt.\newline
+    \textbf{3.2.4.1 Das Prinzip der Semaphore}\newline
+    Ein \textbf{Semaphor} ist eine Integervariable mit $\text{init}(S, \text{Anfangswert})$, $\text{wait}(S)$ (Dekrementierung) und $\text{signal}(S)$ (Inkrementierung). Meistens ist einem Semaphor eine Warteschlange zugeordnet. Diese assoziieren ein busy waiting.\newline
+    Binäre Semaphoren erreichen einen wechselseitigen Ausschluss mit Anfangswert 1.\newline
+    \\
+    \textbf{3.2.4.2 Ablaufsteuerung mit Hilfe von Semaphoren}\newline
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/Ablaufsteuerung.png}
+    \end{figure}\newline
+    \\
+    \textbf{3.2.4.3 Lösung des Erzeuger/Verbraucher Problems mit Hilfe von Semaphoren}\newline
+    Hier muss ein exklusiver Zugriff auf das Lager mit MAX Speicherplätzen garantiert werden, dafür wird eine binäre Semaphore benötigt. Um die Nebenbedingung mit MAX Speicherplätzen zu garantieren, können zwei Semaphoren, eine, die die Anzahl der belegten Speicherplätze beschreibt, und die andere, die die Anzahl der freien Speicherplätze repräsentiert, eingesetzt werden. Initialisiert wird die zweite mit $\text{init}(p, MAX)$.\newline 
+    \\
+    \textbf{3.2.4.4 Lösung für das Leser/Schreiben Problem mit Hilfe von Semaphoren}\newline
+    Ein Leser muss nur dann auf Eintrittserlaubnis in den kritischen Bereich warten, wenn ein Schreiber gerade aktiv ist. Dadurch kann sich aber ein Verschwörerkreis bilden, der ewig den Schreiber blockiert.\newline
+    ein anderer Ansatz für eine Lösung ist, dass wenn ein Schreiber wartet, der Leser nicht in den kritischen Bereich eintreten darf, analog wie oben kann sich ein umgekehrter Verschwörerkreis bilden.\newline
+    Dies zu lösen wird ein alternatierendes Verfahren eingesetzt. Eine Analogie ist eine gegenderte Rednerliste, bei der keine weitere Männer mehr zugelassen werden, wenn sich eine Frau meldet und umgekehrt.\newline
+    \\
+    \textbf{3.2.4.5 Das Philosophenproblem}\newline
+    Hier wird jedes Stäbchen durch eine Semaphore repräsentiert. Bei quasi gleichzeitigem Beginn kann es aber zu einem Deadlock koommen, falls alle auf das linke Stäbchen warten. Um dies zu vermeiden wird vorausgesetzt, das maximal $N-1$ von $N$ Philosophen Zugriff bekommen. 
 \subsubsection{Monitore}
+    \textbf{3.2.5.1 Motivation der Monitore}\newline
+    OBwohl Semaphore ein flexibles Tool sind, ist es schweirig in gewissen Situationen ein korrektes Programm zu erstellen, da die Operationen meinst so über dieses verstreut sind, dass es schwierig ist, ihre globale Wirkung zu erkennen. Aus diesem Grund werden Monitore eingeführt.\newline
+    \\
+    \textbf{3.2.5.2 Das Prinzip der Monitore}\newline
+    Ein \textbf{Monitor} ist ein Objekt, das sich im wesentlichen aus einer Menge von Prozeduren auf (gemeinsam) genutzten Daten zusammensetzt. Der Monitor kann nur von einem Prozess genutzt werden. Es besteht aus einer oder mehreren Prozeduren, lokalen Daten und einer Warteschlange für ankommende Prozesse.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/monitor.png}
+    \end{figure}\newline
+    Es existieren weitere Funktionen zur Realisierung der Synchronisation in einem Monitor, nämlich $\text{cwait}(c)$, welcher die Ausführung eines Prozesses suspendiert bis die Bedingung c eingetreten ist, und $\text{csignal}(c)$, welcher die Ausführung eines suspendierten Prozesses, der auf c wartet, wieder aufnimmt.
 \subsubsection{Message Passing}
-
+    Für den Nachrichtenaustausch werden die Funktionen $\text{send}(\text{destinatio},\text{message})$ und $\text{receive}(\text{source}, \text{message})$ eingeführt.\newline
+    \textbf{3.2.6.1 Blocking}\newline
+    \begin{itemize}
+        \item Blocking Send, Blocking Receive: Sendender Prozess wird bis zum Abschicken und Empfang der Nachricht vom Empfänger geblockt; Empfänger wird beim receive-Aufruf bis zum Empfang geblockt
+        \item Nonblocking Send, Blocking Receive: Der Sender wird nich bis zum Empfang blockiert; effektiv, da mehrere Nachrichten an unterschiedliche Empfänger unmittelbar geschickt werden können
+        \item Nonblocking-Receive-Ansätze: Probleme resultieren aus dem Warten auf die receive; Puffering macht Sinn
+    \end{itemize}\newline
+    \\
+    \textbf{3.2.6.2 Adressing}\newline
+    Die \textbf{direkte Adressierung} gibt beim Zielprozess genau an, von welchem Prozess eine Nachricht erwartet wird und es wird jede Nachricht akzeptiert. Bei der \textbf{indirekten Adressierung} werden Nachrichten über eine gemeinsam genutzte Datenstruktur geschickt, die aus einer Warteschlange besteht (Mailboxen) mit den Möglichkeiten 1:1 (1 Sender, 1 Empfänger), n:1, 1:n (Broadcast) oder n:m. Prozesse können statisch (Ports) oder dynamisch (connect/disconnect) zugeordnet werden.\newline
+    Hier kann nur immer an eine Nachricht, die eine receive Operationen aufrufen, geliefert werden, bei leerer Mailbox werden alle Prozesse blockiert und wenn eine Nachricht verfügbar wird, wird nur ein Prozess aktiviert und ihm die Nachricht übertragen.
+    
 \newpage
 \section{Ressourcenverwaltung}
 \subsection{Speicher}
+    Der Speicher ist als linearer Adressraum und hierarchisch organisiert. Dieser muss vom Betriebssystem verwaltet werden, da nicht alle Programme und Datenstrukturen iin den Hauptspeicher geladen werden können.
 \subsubsection{Speicherverwaltung}
+    \begin{itemize}
+        \item Relocation: Hauptspeicher wird gemeinsam genutzt; Programme werden ausgelagert, nur Prozess-Image muss im Hauptspeicher liegen; $\rightarrow$ Referenzen müssen in physische Adressen umgewandelt werden
+        \item Protection: Schutz eines jeden Prozesses; $\rightarrow$ fremde Prozesse dürfen ohne Erlaubnis keine Informationen lesen oder modifizieren
+        \item Sharing: gemeinsamer Speicherbereich 
+        \item Logical Organization: Hauptspeicher mit Adressraum aus Folge von Bits; Programme modular geschrieben; $\rightarrow$ modulare Organisation besser zu verwalten 
+        \item Physical Organization: Einteilung in Haupt- und Hintergrundspeicher (permanente Speicherung); $\rightarrow$ Transport der Daten von Hintergrund- in Hauptspeicher und umgekehrt
+    \end{itemize}
 \subsubsection{Speicherpartitionierung}
 \subsubsection{Virtueller Speicher}
 \subsubsection{Paging}
 \subsubsection{Segmentierungsstrategien}
 \subsection{E/A Verwaltung}
 \subsubsection{Klassifizierung von E/A-Geräten}
+    \textbf{Menschen - lesbare Geräte} sind geeignet, um mit Nutzern zu kommunizieren.\newline
+    \textbf{Maschinen - lesbare Geräte} sind geeignet, um mit elektronischer Ausrüstung zu kommunizieren.\newline
+    \textbf{Kommunikationsgeräte} sind geeignet, um mit entfernten Geräten zu kommunizieren.\newline
+    Merkmale sind die Datenrate, die Anwendung, die Komplexität der Kontrolle, die Arten des Datentransfers und der Darstellung und die Fehlerbehandlung.
 \subsubsection{E/A Techniken}
-
+    Bei der \textbf{programmierten E/A} wird durch einen Prozess ein E/A-Befehl ausgeführt. Anders wird bei der Ausführung des E/A-Befehls im \textbf{unterbrechungsgesteuerten E/A} nicht auf diesen gewartet, sondern setzt nachfolgende Operationen fort. Der \textbf{Direct Memory Access (DMA)} kontrolliert den Datenaustausch zwischen dem Hauptspeicher und einem E/A-Modul.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/zusammenfassung_ea.png}
+    \end{figure}
+    Begriffe sind der \textbf{E/A-Kanal} für ein fortgeschrittenes E/A-Modul, welches bereits die Funktionalität eines Prozessors besitzt, und \textbf{E/A-Prozessor} für ein E/A-Modul mit zusätzlichem lokalem Speicher.\newline
+    Eine DMA kann durch Single Bus Detached DMA, Single Bus Integrate DMA und E/A-Bus realisiert werden.\newline
+    Beim \textbf{Single Bus Detached DMA} nutzen alle Module das Bussystem gemeinsam. Dies ist einfach und billig, aber nicht effizient, da für einen Transport zwei Buszyklen benötigt werden und der Neumannsche Flaschenhals eintreten kann.\newline
+    Beim \textbf{Single Bus Integrate DMA} können einige der Buszyklen eingespart werden.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/single_bus_integrate_dma.png}
+    \end{figure}\newline
+    Der \textbf{E/A-Bus} erweitert die Single Bus Integrate DMA, indem die E/A-Module durch einen eigenen Bus überhalb des DMA-Moduls miteinander verbunden werden. 
+    
 \newpage
 \section{Interprozesskommunikation}
 \subsection{Lokale Interprozesskommunikation}
