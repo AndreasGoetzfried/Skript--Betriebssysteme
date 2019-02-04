@@ -408,9 +408,15 @@
     Markierung können einer Menge aktiverter Transitionen zugeordnet werden, $T_{akt}(M)={t\in T:(\forall_{s\in t}:M(s)\geq W(s,t))\wedge (\forall_{s\in t}M(s)+W(t,s)\leq K(s))}$.\newline
     \\
     \textbf{3.1.3.4 Modellierung von nebenläufigen Prozessen}\newline
-    \textbf{FEHLT WAS}
+    Ein Erzeuger/Verbraucher-Problem definiert sich durch die Probleme, dass der Verbraucher nur auf produzierte Daten vom Speicher zugreifen kann, der Erzeuger nur bei freien Plätzen ablegen darf und der Speicher nicht gleichzeitig von beiden verändert werden darf. Zur Realisierung dieses Problems werden drei Semaphoren benötigt (Modellierung des freien Platzes, des Speicherzugriffs und des belegten Platzes).\newline
     \\
     \textbf{3.1.3.5 Deadlock Detection (Deadlockerkennung)}\newline
+    Dies prüft, ob ein Circular Wait vorliegt. Sei dies der Fall, werden Recovering-Strategien angewandt. Um \textit{teilweise} und \textit{vollständige Verklemmungen} durch Analyse von Petri-Netzen erkennen zu können, wird ein \textbf{Ereichbarkeitsgraph} genutzt. Sei in einem Petrinetz die Menge der verketteten Transaktionen T, dann ist eine ereichbare Markierung ein Zustand der durch eine dieser Transaktionen erreicht werden kann. Die Erreichbarkeitsmenge enthält die ANfangsmarkierung und alle erreichbaren Markierungen von dieser Anfangsmarkierung.  
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/erreichbarkeitsgrapf.png}
+    \end{figure}\newline
+    Eine \textbf{Verklemmung} existiert, wenn es keine Nachfolgemarkierung für eine Markierung gibt. \textbf{Teilweise Verklemmung} existiert, wenn eine Markierung nicht von jeder anderen Markierung aus erreichbar ist.
 \subsection{Prozesskoordination}
 \subsubsection{Nebenläufigkeit von Prozessen}
     \textbf{Unabhängige Abläufe} sind gegebenenfalls parallel auszuführende Benutzeraufträge, die sich gegenseitig nicht beeinflussen. Wohingegen \textbf{abhängige Abläufe} miteinander kooperieren.\newline
@@ -495,9 +501,113 @@
         \item Physical Organization: Einteilung in Haupt- und Hintergrundspeicher (permanente Speicherung); $\rightarrow$ Transport der Daten von Hintergrund- in Hauptspeicher und umgekehrt
     \end{itemize}
 \subsubsection{Speicherpartitionierung}
+    \textbf{4.1.2.1 Feste Partitionierung}\newline
+    Hierbei unterscheidet man zwischen gleichgroßen und unterschiedlich großen Partitionen des Hauptspeichers. In der jeweiligen Partition kann ein Prozess geladen werden, dessen Größe kleinergleich der Partitionsgröße ist, bei voller Auslastung, können Prozesse ausgelagert werden.\newline
+    Ist ein Programm zu groß für eine Partition, wird das Programm vom Programmierer in Teilprogramme zerlegt. Interne Fragmentierung kann vorkommen, wenn kleine Programme eine Partition belegen und so Platz verschwendet wird.\newline
+    \\
+    \textbf{4.1.2.2 Dynamische Partitionierung}\newline
+    Bei der dynamischen Partitionierung ist die Anzahl und Größe der Partitionen variabel. Diese neue Speicheranforderung entspricht in der Regel in ihrer Größe nicht den bestehenden Lücken, ws als externe Fragmentierung bezeichnet wird. Um die Lücken am Besten zu füllen wird entweder Best-Fit (kleinste Lücke, in die der Prozess passt), First-Fit (erste passende Lücke) oder Next-Fit (ab letzter Belegung nächste passende Lücke).  
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/dynamische_partitionierung.png}
+    \end{figure}\newline
+    \\
+    \textbf{4.1.2.3 Buddy-Systeme}\newline
+    Feste Partitionierung begrenzt die Anzahl der aktiven Prozesse und nutzt den Speicherplatz ineffizient. Dagegen ist eine dynamische Partitionierung komplex zu verwalten und hinterlässt unnutzbare Freiräume. Ein Kompromiss sind die Buddy-Systeme.\newline
+    Ein Speicher der Größe $2^N$ wird in $2^K$ große Blöcke eingeteilt. Die kleinste Speichergröße ist $2^L$ und die größte $2^U$. Im Anfangszustand wird der verfügbare Speicherplatz als einzelner Block der Größe $2^U$ betrachtet. Kommt dann eine Speicheranforderung, wird die Bedingung $2^{U-1}<S<\leq 2^U$ geprüft, bei $S>2^U$ kann die Anforderung icht erfüllt werden. Der Speicherblock wird in zwei Buddies der Größe $2^{U-1}$ aufgespalten und für den ersten Block wird die Bedingung $2^{U-2}<S<=2^{U-1}$ getestet. Dies wird so lange ausgeführt, bis die Speichergröße passt.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/buddysystem.png}
+    \end{figure}\newline
+    Die Listen müssen hierbei immer aktualisiert werden. Bei Freigabe von Buddies muss geprüft werden, ob der benachbarte Buddy auch frei ist, falls dies der Fall ist, werden beide Buddies zu einem größeren zusammengefasst. Ein Nachteil ist die interne und externe Fragmentierung.\newline
+    Um der internen Fragmentierung möglichst gering zu halten, wird das \textbf{gewichtete Buddy-System} eingeführt. Dabei wird ein Block der Größe $2^{n+2}$ im Verhältnis 1:3 geteilt und der Buddy $3\cdot 2^r$ im Verhältnis 2:1. Damit erhält man flexible Buddygrößen und weniger Verschwendung von Platz, der Verwaltungsaufwand wird aber damit auch größer.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/gewichtetesbuddysystem.png}
+    \end{figure}
 \subsubsection{Virtueller Speicher}
+    \textbf{4.1.3.1 Prinzip der Speicherverwaltung}\newline
+    Der \textbf{physische Adressraum} ist die Menge der im Arbeitsspeicher physisch vorhandener Speicherplätzen. Die Speicherzellen derselben Größe werden linear angeordnet.\newline
+    Der \textbf{logische Adressraum} steht dem physischen entgegen und wird benötigt, falls die Kapazität des pysischen Arbeitsspeichers nicht ausreicht.\newline
+    Die Speicherverwaltung soll logische zu physischen Adressen zuordnen, abgebildet durch $L\rightarrow P$. Ist die Kardinalität von L kleiner gleich der von P, kann der logische problemlos in den physischen aufgenommen werden.\newline
+    Weiterhin wird der \textbf{virtuelle Speicher} gefordert, welcher bei Rechnern, die Multiprogramming-fähig sind, mehreren Nutzern erlaubt, gleichzeitig zu arbeiten und Teile des Speichers durch Systemsoftware zu belegen.\newline
+    \\
+    \textbf{4.1.3.2 Datentransport zwischen Hintergrund- und Arbeitsspeicher}\newline
+    Zum Datentransport werden Transporteinheiten fester Länge als \textbf{Seiten} definiert. Der logische Speicher wird in diese aufgeteilt.\newline
+    Das Gegenstück im physischen Adressraum sind die \textbf{Frames}, welche dieselbe Größe haben wie die Seiten.\newline
+    \\
+    \textbf{4.1.3.3 Abbildung virtueller auf reale Adressen}\newline
+    Eine Maschinenadresse muss die Informationen zur Nummer des Seitenrahmens und die Relativadresse (Offset) angegeben sein.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/maschinenadresse.png}
+    \end{figure}\newline
+    Virtuelle Adressen (Programmadressen) sind ähnlich aufgebaut.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/programmadresse.png}
+    \end{figure}\newline
+    Die Abbildungen der virtuellen auf die realen Adresen wird mit Hilfe einer Seitentabelle vorgenommen, welche die Seiten im Hintergrundspeicher durchnummeriert und zu jeder Seite angibt, ob und mit welcher Adresse sie im Hauptspeicher verfügbar ist.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/seitentabellen.png}
+    \end{figure}
 \subsubsection{Paging}
+    Ein Vorteil ist die Ausschaltung der externen Fragmentierung, jedoch wird die interne Fragmentierung erhöht.\newline
+    \textbf{4.1.4.1 Paging-Strategien}\newline
+    \begin{itemize}
+        \item Demand Paging: fehlt eine Seite im Hauptspeicher, wird diese on demand nachgeladen
+        \item Demand Preparing: fehlt eine seite im Hauptspeicher, werden mehrere Seiten gleichzeitig geladen; dadurch ist die Zahl der Zugriffe auf den Hintergrundspeicher geringer
+        \item Look-Ahead-Paging: bei allen möglichen Fehlern können Nachladeoperationen stattfinden
+    \end{itemize}\newline
+    \\
+    \textbf{4.1.4.2 Seitenaustauschalgorithmen}\newline
+    Folgende Vorschriften (policies) gelten für den virtuellen Speicher:
+    \begin{itemize}
+        \item Resident Set Management Policy: soll sich eine Anzahl an Seiten ständig im Hauptspeicher befinden
+        \item Fetch Policy: bestimmt die Paging-Strategie
+        \item Placement Policy: bestimmt den Speicherort der Page im Frame des Hauptspeichers
+        \item Replacement Policy: sollten alle zugeordneten Frames belegt sein und eine weitere Page benötigt werden, muss entschieden werden, welche Seite ersetzt werden muss
+    \end{itemize}\newline
+    Im Folgenden werden verschiedene Ersetzungsstrategien der Replacement Policy betrachtet.
+    \begin{itemize}
+        \item OPT (Optimalstategie): wählt die am längsten nicht mehr benötigte Seite; schwierige Realisierung, da nur die nächste zu bearbeitende Seite sichtbar ist
+        \item FIFO (First-In-First-Out): wählt die älteste Seite
+        \item LRU (Least Recently Used): wählt die am längsten nicht mehr benutzte Seite
+        \item LFU (Least Frequentliy Used): wählt die am wenigsten genutzte Seite
+        \item Climb-Strategie: die unterste Seite, die beim Aufstieg der Seiten bei jedem Aufruf, an dieser Position liegt
+        \item Clock-Strategie: Seiten werden als zyklische Liste betrachtet; ein Use Bit wird eingeführt, beim ersten Laden und Referenzierung bekommt dieses den Wert 1; wählt die Seite mit Use Bit 0; setzt bei der Suche nach Use Bit 0, alle Use Bit 1 auf 0 zurück
+    \end{itemize}\newline
+    \\
+    \textbf{4.1.4.3 Minimierung von Seitenfehlern}\newline
+    \textbf{Belady's Anomalie} beschreibt das Auftreten von mehr Seitenfehler bei mehr Frames im Hauptspeicher bie gleicher Größe der Frames.\newline
+    \textbf{Reference String} beschreibt die Folge an Speicherzugriffen eines Prozesses.\newline
+    Eine Paging-System wird durch den Reference String, den Seitenaustauschalgorithmus und die Anzahl der Seiterrahmen im Speicher.\newline
+    Eine abstrakte Maschine wird damit durch eine Menge, die den Status des Speichers beschreibt, mit der Anzahl an Elementen n, die auch der Anzahl der zugeordneten virtuellen Seiten entspricht, definiert. Die Menge teilt sich in den Bereich der Seiten, die gerade im Speicher sind, und die, die schon einmal angesprochen und ausgelagert wurden. Zu Beginn ist die Menge folglich leer.\newline
+    \textbf{Stack-Algorithmen} beschrieben Seitenaustauschalgorithmen, bei denen alle Seiten, die sich bei einem Speicher mit $m$ Seitenrahmen nach $r$ Speicherzugriffen im Speicher befinden, auch bei einem Speicher mit $m+1$ Seitenrahmen nach $r$ Speicherzugriffen im Speicher befinden, d.h. $M(m,r)\subset M(m+1,r)$.\newline
+    Im Folgenden werden nur noch Stack-Algorithmen betrachtet.\newline
+    Der \textbf{Distance String} beschreibt eine Seitenreferenz durch die Entferneung der bisherigen Position der Seite im Stack von dessen Beginn.\newline
+    Um die Anzahl von Seitenfehlern vorhersagen zu können, wird folgender Algorithmus eingeführt.
+    \begin{equation}
+        F_m = \sum_{k=m+1}^n C_k + C_{\infty} \text{mit} C_k \text{Anzahl der Vorkommen von k bzw. unendlich im Distance String}
+    \end{equation}\newline
+    \\
+    \textbf{4.1.4.4 Working Set Strategie}\newline
+    Damit die Anzahl an Frames, die einem Prozess zugeordnet werden, variabel gestaltet werden soll, wird die Working Set Strategie eingeführt. Hierzu wird die Lifetime-Funktion betrachtet, die die mittlere Zeit zwischen aufeinanderfolgenden Seitenfehlern in Abhängigkeit von der zugeordneten Rahmenzahl m angibt.
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/lifetimefunktion.png}
+    \end{figure}\newline
+    Dem Ansatz des Working Set liegen die Annahmen, dass die jüngste Vergangenheit eng mit der unmittelbaren Zukunft korreliert, ein Prozess benötigt die Anzahl der aktiven Seiten auch in Zukunft und über weite Bereiche verhalten sich Prozesse lokal, dass heißt, Seiten, die erst vor kurzem referenziert wurden, werden in Zukunft wahrscheinlicher referenziert, Zugrunde.\newline
+    Das \textbf{Working Set} ist als $W(t,h):=\bigcup_{i=t-h+1}^t r_i$ mit t Zeit und h Zugriffen definiert.\newline
+    Bei dieser Strategie kann es aber passieren, dass mehr Frames gebraucht werden als vorhanden sind, und die Frage bleibt, wie h zu wählen ist. 
 \subsubsection{Segmentierungsstrategien}
+    Um Lücken zu füllen, wird die Speicherverdichtung mit viel Zeitaufwand durchgeführt, deshalb werden auch Segmentierungsstrategien entworfen.\newline
+    Diese können sein First Fit (FF), wobei das Segement in die erste passende Lücke gepackt wird, Best Fit (BF), in die kleinste passende Lücke, und Rotating First Fit (RFF), wie Next-Fit bei Partitionisierung. 
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/3_Kapitel/segmentierungsstrategien.png}
+    \end{figure}
 \subsection{E/A Verwaltung}
 \subsubsection{Klassifizierung von E/A-Geräten}
     \textbf{Menschen - lesbare Geräte} sind geeignet, um mit Nutzern zu kommunizieren.\newline
@@ -524,11 +634,99 @@
 \section{Interprozesskommunikation}
 \subsection{Lokale Interprozesskommunikation}
 \subsubsection{Grundlagen des Nachrichtenaustauschs}
+    Es gibt verschiedene Verbindungen wie Unicast, Multicast und Broadcast. Man unterscheidet zwischen verbindungsorientierter (Kommunikation mit Vereinbarung und Nachfragen beim Empfänger, z.B. TCP) und verbindungsloser (Kommunikation ohne Vereinbarung mit dem Empfänger, z.B. IP-Protokoll) Kommunikation.\newline
+    Kanäle, die zwischen zwei Prozessen aufgebaut werden und einen Strom aus Bytes übermitteln, werden \textbf{Pipes} genannt. Dazu dienen die Operationen \textit{send (Kanal, Quelldaten)} und \textit{receive (Kanal, Zieldatenbereich)}.\newline
+    Ist für beide Prozesse der Zeitpunkt der Abholung der Daten unerheblich, wird von \textbf{asynchroner Kommunikation} gesprochen. Dafür werden die Daten oder eine receive-Anfrage im Kanal zwischengespeichert.\newline
+    Eine \textbf{synchrone Kommunikation} erfordert hingegen Wissen aller Teilnehmer und wird sofort abgerufen. 
 \subsubsection{Pipes}
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/4_Kapitel/pipeaufbau.png}
+    \end{figure}\newline
+    Eine Interprozesskommunikation benutzt eine Pipe. Diese können nur zwischen Prozessen eingerichtet werden, die gemeinsame Vorfahren haben. Außerdem sind sie halbduplex, dass heißt das Daten nur in eine Richtung fließen können. Die \textbf{Stream Pipes} besitzen diese zwei Einschränkungen nicht.\newline
+    Eingerichtet wird eine Pipe über den Systemaufruf \textit{pipe} (\textit{fd[0] / fd[1]} sind geöffnete Filescriptoren zum Lesen / Schreiben), dann wird \textit{fork} aufgerufen, um einen Kindprozess zu generieren und dann wird beschlossen, welche Seite liest und welche schreibt.\newline
+    Die Konstante \textbf{PIPE_BUF} legt die Buffergröße der Pipe fest, zuviel geschriebene Daten gehen verloren.\newline
+    Eine Kommunikation zwischen zwei Kindprozessen findet wie folgt statt. Zuerst wird das Schreib-Kind kreiert, dann wird die Schreibseite der Pipe vom Elternprozess geschlossen und das Schreibkind schließt die Leseseite. Anschließend wird das Lese-Kind vom Elternprozess kreiert, die Leseseite der Pipe geschlossen und vom Lese-Kind die Schreibseite.\newline
+    \begin{figure}[H]
+        \centering
+	    \includegraphics[width=90mm]{Skizzen/4_Kapitel/komm_zwei_kind.png}
+    \end{figure}
 \subsubsection{FIFOs}
+    Um zwischen beliebigen Prozessen zu kommunizieren, werden \textbf{FIFOs} benötigt. Bei Prozeduraufrufen unterscheidet man zwischen Anouncements (ohne Antwort) und Invocations (mit Antwort). 
 \subsubsection{Stream Pipes}
+    Streampipes lösen das Problem des Halbduülexbetriebs mit der Funktion \textit{stream-pipe} und das Problem der Kommunikation zwischen unverwandten Prozessen. 
 \subsubsection{Sockets}
+    Sockets dienen zur Kommunikation von Prozessen in einem Netzwerk und basieren auf verschiedenen Protokollen des ISO-Modells.
 \subsection{Verteilte Systeme}
 \subsubsection{Einführung in Verteilte Systeme}
+    Ein verteiltes System ist ein System mit räumlich verteilten Komponenten, die keinen gemeinsamen Speicher benutzen und einer dezentralen Administration unterliegen.\newline
+    \textbf{5.2.1.1 Historie Verteilter Systeme}\newline
+    Rechenleistung hat sich alle zwei Jahre verdoppelt, schnelle, lokale Datennetze verbinden verschiedene PCs, programmiersprachliche Verbesserungen und die Abkehr von hierarchisch aufgebauten Organisationsformen ermöglichten die Entwicklung verteilter Systeme.\newline
+    \\
+    \textbf{5.2.1.2 Vorteile Verteilter Systeme}\newline
+    \begin{itemize}
+        \item Ermöglichung der Anpassung der Größe eines Systems
+        \item Existierende Systeme können von neu hinzukommenden Systemkomponenten genutzt werden
+        \item Mindert Risiko der Überlastung einzelner Systemkomponenten
+        \item Überschaubare Verwaltung führt zu kosteneffektiver Realisierung
+        \item Eigentümer einer Ressource managt diese
+        \item Autonome Bestandteile
+    \end{itemize}
+    Mögliche Nachteile entstehen beim Übergang zu verteilten Systemen wie ein Softwaredefizit bei komplexen Lösungen. Hinzukommende Netzwerkkomponenten können neuartige Fehler verursachen und auch der Datenschutz ist problematisch.\newline
+    \\
+    \textbf{5.2.1.3 Klassifikation Verteilter Systeme}\newline
+    Es gibt \textbf{(non) shared memory-Systeme}, \textbf{lose/fest gekoppelte Systeme} und \textbf{bus-/switchbasierte Systeme}.\newline
+    \\
+    \textbf{5.2.1.4 Eigenschaften Verteilter Systeme}\newline
+    \begin{itemize}
+        \item Räumlich Trennung
+        \item Parallelität 
+        \item Lokale Zustandsbetrachtung müssen zusätzlich durchgeführt werden
+        \item Unabhängigkeit der Komponenten
+        \item Asynchronität
+        \item Autoritätenmanagement
+        \item Notwendigkeit kontextbasierter Namensverwaltung
+        \item Migration bei Programmen zur Leistungsverbesserung
+        \item Heterogenität
+        \item Evolution
+        \item Mobilität zur Leistungssteigerung
+    \end{itemize}
+    Folgende Eigenschaften müssen in einem verteilten System implementiert sind:
+    \begin{itemize}
+        \item Offenheit
+        \item Integrierbarkeit
+        \item Flexibilität
+        \item Modularität
+        \item Förderation
+        \item Verwaltbarkeit
+        \item Sicherstellung von Dienstqualitäten
+        \item Sicherheit
+        \item Verteilungstransparenz (Zugriffs-, Orts-, Migrations-, Replikations-, Abarbeitungs-, Ausfall-, Ressourcen-, Verbunds-, und Gruppentransparenz)
+    \end{itemize}
 \subsubsection{Kommunikation in Verteilte Systeme}
+    \textbf{5.2.2.1 Das Client/Server Modell}\newline
+    Da der Verwaltungsaufwand der sieben Schichten im OSI-Modell zu hoch ist, wird ein Grundmodell, das Client/Server-Modell eingeführt.\newline
+    Die Idee ist ein Betriebssystem als Menge kooperierender Prozesse (Server) zu strukturieren, welche Clients Dienste bereitstellen. Es basiert auf einem einfachen, verbindungslosen Anfrage/Antwortprotokoll mit 3 Protokollschichten (Bitübertragungsschicht, Verbindungsschicht und Anfrage/Anwortschicht).\newline
+    Entweder wird die \textbf{Adressierung} durch eine Konstante im Header definiert, der maschine-process-Adressierung oder durch Broadcsten des Lokalisierungspakets auf das der betroffene Server antwortet.\newline
+    Es wird bei Kommunikationsprimitiven zwischen \textbf{blockierten} (synchronen, Prozess wird während Sendung der Nachricht blockiert) und \textbf{nicht-blockierten} (asynchronen) Primitven unterschieden.\newline
+    Das \textbf{Puffering} kann als Mailbox eingeführt werden.\newline
+    Die \textbf{Zuverlässigkeit} kann nach dem Prinzip des Abschickens und was danach kommt ist egal, der Bestätigung oder der Bestätigung des piggy-backing (bei Time-Out individuelle Bestätigung) funktionieren.\newline
+    \\
+    \textbf{5.2.2.2 Der Remote Procedure Call}\newline
+    Beim \textbf{konventionalen lokalen Prozeduraufruf} wird das Programm eingelesen, Parameter in das Register kopiert und anschließend ausgeführt. Der Rückgabewert wird über call-by-value/reference zurückgegeben.\newline
+    Der \textbf{entfernte Prozeduraufruf} werden die Parameter nicht ins Register kopiert, sondern in einer Nachricht verpackt verschickt und dann vom Server wie ein lokaler Prozeduraufruf ausgeführt. Anschließend werden die Ergebnisse in einer Nachricht verpackt und an den Aufrufer geschickt.\newline
+    Probleme können beim Lesen der Rückgabeparameter als umgekehrter Stack auftauchen.\newline
+    Man unterscheidet die Fehler \textbf{Client kann Server nicht lokalisieren, Anfragenachricht vom Client an Server geht verloren, Server fällt nach Erhalt einer Anfrage aus, Antwort von Server an Client geht verloren und der Client fällt aus, nachdem eine Anfrage gestellt wird}.\newline
+    \textbf{Implementierungsaspekte} sind:
+    \begin{itemize}
+        \item verbindungslos/orientiertes  Protokoll? $\rightarrow$ verbindungslos, da Sicherung von Software übernommen wird
+        \item IP-Protokolle werden benutzt
+        \item Bestätigung: Stop-and-wait, blast (Entscheidung, ob neu übertragen) oder selective-repeat (neue Anforderung)
+        \item Flusskontrolle 
+    \end{itemize}\newline
+    \\
+    \textbf{5.2.2.3 Kommunikation in Verteilten Systemen}\newline
+    Eine \textbf{Gruppe} ist eine Menge an Prozessen, die miteinander kooperieren mit den Eigenschaften des Multicastings an alle Gruppenmitglieder und der dynamischen Erzeugung und Auflösung.\newline
+    Die Adressierung erfolgt durch die Einrichtung einer eigenen Multicastadresse für die Gruppe, durch Broadcasting und Entscheidung des Kerns oder durch Prädikatadressierung.\newline
+    Zwei Eigenschaften sind für eine einfache Benutzung von Gruppenkommunikation wichtig. Die Atomarität (an alle oder an kein Mitglied) und die Nachrichtenreihenfolgeeinhaltung. 
 \end{document}
